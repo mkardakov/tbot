@@ -33,7 +33,7 @@ services:
 
     Telegram\Bot\Commands\HelpCommand: ~
 
-    App\DataTransformer\InputDataTransformer:
+    App\Controller\MessageController:
         arguments:
             $commands: !tagged_iterator app.telegram
 

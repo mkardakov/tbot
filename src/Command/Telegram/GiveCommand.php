@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
+
 namespace App\Command\Telegram;
+
 
 use App\Entity\Announcement;
 use App\Entity\User;
@@ -10,24 +12,19 @@ use Psr\Log\LoggerInterface;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Api;
 use Telegram\Bot\Commands\Command;
-use Telegram\Bot\Keyboard\Keyboard;
 
-/**
- * Class StartCommand
- * @package App\Command\Telegram
- */
-class StartCommand  extends Command implements OptionsAwareInterface
+class GiveCommand extends Command implements OptionsAwareInterface
 {
 
     /**
      * @var string Command Name
      */
-    protected $name = "start";
+    protected $name = "give";
 
     /**
      * @var string Command Description
      */
-    protected $description = "Создайте обЪявление о поиске нового дома для животного";
+    protected $description = "Я хочу отдать животное";
 
     private $logger;
 
@@ -54,25 +51,11 @@ class StartCommand  extends Command implements OptionsAwareInterface
         // the user/chat id who triggered this command.
         // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically
         // handled when you replace `send<Method>` with `replyWith` and use the same parameters - except chat_id does NOT need to be included in the array.
-        $this->replyWithMessage(['text' => 'Давайте создадим новое объявление']);
+
 //        $announcement->
         // This will update the chat status to typing...
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $commands = $this->telegram->getCommands();
-
-        $text = '';
-        foreach ($commands as $name => $handler) {
-            if (in_array($name, $this->getOptions()))
-            /* @var Command $handler */
-            $text .= sprintf('/%s - <b>%s</b>'.PHP_EOL, $name, $handler->getDescription());
-        }
-
-        $this->replyWithMessage([
-            'chat_id' => $this->getUpdate()->getChat()->id,
-            'text' => $text,
-            'parse_mode' => 'HTML'
-        ]);
 //        $keyboard = [
 //            ['Я хочу отдать животное'],
 //            ['Я хочу взять животное'],

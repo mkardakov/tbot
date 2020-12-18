@@ -19,6 +19,12 @@ use App\DataTransformer\DTO\Request;
  */
 class Announcement
 {
+
+    public const ACTION_TAKE = false;
+
+    public const ACTION_GIVE = true;
+
+    public const FINISHED = 'finished';
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -37,19 +43,19 @@ class Announcement
     private $breed;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $animal;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $location;
 
     /**
-     * @ORM\Column(type="json", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $contacts = [];
+    private $contacts;
 
     /**
      * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="announcement", orphanRemoval=true)
@@ -62,14 +68,20 @@ class Announcement
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="announcements")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="announcements", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $step;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -125,12 +137,12 @@ class Announcement
         return $this;
     }
 
-    public function getContacts(): ?array
+    public function getContacts(): ?string
     {
         return $this->contacts;
     }
 
-    public function setContacts(?array $contacts): self
+    public function setContacts(?string $contacts): self
     {
         $this->contacts = $contacts;
 
@@ -189,5 +201,22 @@ class Announcement
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getStep(): ?string
+    {
+        return $this->step;
+    }
+
+    public function setStep(string $step): self
+    {
+        $this->step = $step;
+
+        return $this;
+    }
+
+    public function isFinished()
+    {
+        return $this->step === self::FINISHED;
     }
 }

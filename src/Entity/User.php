@@ -42,7 +42,7 @@ class User
     private $telegramId;
 
     /**
-     * @ORM\OneToMany(targetEntity=Announcement::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Announcement::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $announcements;
 
